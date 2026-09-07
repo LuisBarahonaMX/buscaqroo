@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  font-family: Montserrat, sans-serif;
+  background: linear-gradient(180deg, #0f172a, #111827);
+  color: white;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.chat-container {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+}
+
+.titulo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.mensajes {
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-right: 6px;
+}
+
+.mensaje {
+  padding: 12px 14px;
+  border-radius: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.usuario {
+  align-self: flex-end;
+  background: #1d4ed8;
+  color: #ffffff;
+  max-width: 75%;
+  font-weight: 700;
+}
+
+.bot {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  max-width: 80%;
+}
+
+.formulario textarea {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  resize: none;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+}
+
+.botonera {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.botonera button {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 15px;
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+}
+
+.botonera button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.estado {
+  margin-top: 12px;
+  min-height: 22px;
+  font-size: 14px;
+  color: #cbd5e1;
+}
