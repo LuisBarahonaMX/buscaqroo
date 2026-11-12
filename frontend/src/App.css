@@ -1,3 +1,14 @@
+
+/* =========================================
+   BUSCA QROO - ESTILOS PRINCIPALES
+   Actualizacion: 11 noviembre 2026
+   Version: Interfaz compacta y responsive
+   ========================================= */
+
+/* =========================================
+   1. CONFIGURACION GENERAL
+   ========================================= */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -10,6 +21,9 @@
   --guinda-3: #820028;
   --guinda-4: #9f0032;
   --guinda-5: #b80d45;
+
+  --azul-marino: #102b50;
+  --azul-marino-hover: #1b426c;
 
   --glass-bg: rgba(255, 255, 255, 0.10);
   --glass-bg-strong: rgba(255, 255, 255, 0.14);
@@ -44,19 +58,39 @@ body {
   color: var(--text-main);
 }
 
+/* =========================================
+   2. FONDO PRINCIPAL
+   ========================================= */
+
 .app {
   min-height: 100vh;
   width: 100%;
   position: relative;
-  overflow: hidden;
+
+  overflow-x: hidden;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   padding: 32px 18px;
+
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 28%),
-    radial-gradient(circle at top right, rgba(255, 255, 255, 0.05), transparent 22%),
-    radial-gradient(circle at bottom center, rgba(255, 255, 255, 0.04), transparent 28%),
+    radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.06),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(255, 255, 255, 0.05),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at bottom center,
+      rgba(255, 255, 255, 0.04),
+      transparent 28%
+    ),
     linear-gradient(
       135deg,
       var(--guinda-1) 0%,
@@ -71,38 +105,63 @@ body {
   position: absolute;
   inset: 0;
   z-index: 0;
+
   background:
-    linear-gradient(to bottom, rgba(255,255,255,0.03), rgba(255,255,255,0.01)),
-    rgba(255,255,255,0.015);
+    linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0.01)
+    ),
+    rgba(255, 255, 255, 0.015);
+
   backdrop-filter: blur(5px);
+  pointer-events: none;
 }
+
+/* =========================================
+   3. CONTENEDOR CENTRAL
+   ========================================= */
 
 .main-container {
   position: relative;
   z-index: 1;
+
   width: 100%;
   max-width: 1120px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
+/* =========================================
+   4. LOGOTIPO Y TITULO
+   ========================================= */
 
 .logo-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 30px;
+
+  margin-bottom: 22px;
   padding: 8px 0;
 }
 
+/* Logotipo reducido al 50% */
+
 .logo-img {
-  width: 165px;
+  width: 82.5px;
   max-width: 80%;
   height: auto;
+
   object-fit: contain;
-  margin-bottom: 16px;
-  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.22));
+  margin-bottom: 12px;
+
+  filter: drop-shadow(
+    0 12px 28px rgba(0, 0, 0, 0.22)
+  );
+
   transition: var(--transition);
 }
 
@@ -110,39 +169,57 @@ body {
   transform: translateY(-2px) scale(1.01);
 }
 
+/* Titulo al 70% del tamaño original */
+
 .titulo {
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-size: clamp(1.54rem, 2.8vw, 2.24rem);
   font-weight: 800;
-  letter-spacing: 2.5px;
+  letter-spacing: 1.5px;
+
   color: var(--text-main);
-  margin-bottom: 10px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.14);
+  margin-bottom: 8px;
+
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.14);
 }
 
 .subtitulo {
   font-size: 1rem;
   font-weight: 400;
+
   color: var(--text-soft);
+
   max-width: 680px;
   line-height: 1.5;
 }
+
+/* =========================================
+   5. CONTENEDOR DEL CHAT
+   ========================================= */
 
 .chat-wrapper {
   width: 100%;
   max-width: 930px;
   min-height: 620px;
+
   display: flex;
   flex-direction: column;
+
   border-radius: var(--radius-xl);
+
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.14) 0%,
     rgba(255, 255, 255, 0.09) 100%
   );
+
   border: 1px solid var(--glass-border);
+
   box-shadow: var(--shadow-main);
+
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+
   overflow: hidden;
   position: relative;
 }
@@ -151,64 +228,64 @@ body {
   content: "";
   position: absolute;
   inset: 0;
+
   pointer-events: none;
+
   background: linear-gradient(
     180deg,
-    rgba(255,255,255,0.06) 0%,
+    rgba(255, 255, 255, 0.06) 0%,
     transparent 18%,
     transparent 82%,
-    rgba(255,255,255,0.04) 100%
+    rgba(255, 255, 255, 0.04) 100%
   );
 }
 
+/* =========================================
+   6. ENCABEZADO DEL CHAT
+   ========================================= */
+
 .chat-header {
   width: 100%;
-  padding: 20px 24px;
+  padding: 18px 24px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   background: rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.12);
+
   backdrop-filter: blur(10px);
 }
 
 .chat-header h2 {
   font-size: 1.18rem;
   font-weight: 700;
+
   color: var(--text-main);
   letter-spacing: 0.3px;
 }
 
-.btn-limpiar {
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.10);
-  color: var(--text-main);
-  padding: 10px 16px;
-  border-radius: 999px;
-  font-size: 0.92rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
-}
-
-.btn-limpiar:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.28);
-  transform: translateY(-1px);
-}
-
-.btn-limpiar:active {
-  transform: translateY(0);
-}
+/* =========================================
+   7. CUERPO DEL CHAT
+   ========================================= */
 
 .chat-body {
   flex: 1;
-  padding: 26px 22px;
+  min-height: 0;
+
+  padding: 20px 20px;
+
   overflow-y: auto;
+
   display: flex;
   flex-direction: column;
-  gap: 16px;
+
+  /* Menor distancia entre mensajes */
+  gap: 12px;
+
   scroll-behavior: smooth;
 }
 
@@ -229,46 +306,178 @@ body {
   background: rgba(255, 255, 255, 0.24);
 }
 
+/* =========================================
+   8. MENSAJES
+   ========================================= */
+
 .mensaje {
   max-width: 78%;
-  padding: 15px 18px;
+
+  padding: 12px 15px;
   border-radius: 18px;
-  line-height: 1.58;
-  font-size: 0.98rem;
-  word-wrap: break-word;
+
+  line-height: 1.4;
+  font-size: 0.96rem;
+
+  overflow-wrap: anywhere;
   white-space: pre-wrap;
+
   box-shadow: var(--shadow-soft);
   transition: var(--transition);
 }
 
 .mensaje-bot {
   align-self: flex-start;
+
   color: var(--text-main);
+
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.18) 0%,
     rgba(255, 255, 255, 0.12) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.10);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.10);
+
   border-top-left-radius: 8px;
+
+  /* Markdown controla el espaciado */
+  white-space: normal;
 }
 
 .mensaje-user {
   align-self: flex-end;
+
   color: #ffffff;
+
   background: linear-gradient(
     180deg,
     rgba(70, 0, 24, 0.82) 0%,
     rgba(58, 0, 20, 0.88) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+
   border-top-right-radius: 8px;
 }
 
+/* =========================================
+   9. RESPUESTAS RAG COMPACTAS
+   ========================================= */
+
+.respuesta-rag {
+  color: inherit;
+
+  /* Interlineado compacto */
+  line-height: 1.4;
+
+  font-size: 0.94rem;
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* =========================================
+   10. PARRAFOS
+   ========================================= */
+
+.respuesta-rag p {
+  margin: 0 0 5px;
+  line-height: 1.4;
+}
+
+/* =========================================
+   11. TITULOS Y SUBTITULOS
+   ========================================= */
+
+.respuesta-rag h1,
+.respuesta-rag h2,
+.respuesta-rag h3,
+.respuesta-rag h4,
+.respuesta-rag h5,
+.respuesta-rag h6 {
+  color: #ffffff;
+
+  font-weight: 700;
+  line-height: 1.3;
+
+  margin: 8px 0 5px;
+}
+
+.respuesta-rag h1 {
+  font-size: 1.30rem;
+}
+
+.respuesta-rag h2 {
+  font-size: 1.18rem;
+}
+
+.respuesta-rag h3 {
+  font-size: 1.08rem;
+}
+
+.respuesta-rag h4,
+.respuesta-rag h5,
+.respuesta-rag h6 {
+  font-size: 1rem;
+}
+
+.respuesta-rag strong {
+  font-weight: 750;
+}
+
+/* =========================================
+   12. LISTAS COMPACTAS
+   ========================================= */
+
+.respuesta-rag ul,
+.respuesta-rag ol {
+  margin: 4px 0 6px;
+  padding-left: 21px;
+}
+
+/* Elementos de lista */
+
+.respuesta-rag li {
+  margin: 0 0 2px;
+  padding: 0;
+
+  line-height: 1.4;
+}
+
+/* Parrafos dentro de listas */
+
+.respuesta-rag li p {
+  margin: 0 0 2px;
+}
+
+/* Listas anidadas */
+
+.respuesta-rag li ul,
+.respuesta-rag li ol {
+  margin: 2px 0 3px;
+  padding-left: 19px;
+}
+
+/* Ultimo elemento de una lista */
+
+.respuesta-rag li:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================
+   13. ENLACES
+   ========================================= */
+
 .mensaje-link {
   color: #66b3ff;
+
   font-weight: 700;
   text-decoration: underline;
+
   word-break: break-word;
   transition: var(--transition);
 }
@@ -278,10 +487,113 @@ body {
   text-decoration: none;
 }
 
+/* =========================================
+   14. CITAS Y BLOQUES DE TEXTO
+   ========================================= */
+
+.respuesta-rag blockquote {
+  border-left: 3px solid #a8d4ff;
+
+  padding: 5px 10px;
+  margin: 6px 0;
+
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+}
+
+/* =========================================
+   15. CODIGO
+   ========================================= */
+
+.respuesta-rag code {
+  font-family: Consolas, monospace;
+
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 4px;
+
+  padding: 2px 5px;
+  overflow-wrap: anywhere;
+}
+
+.respuesta-rag pre {
+  background: rgba(0, 0, 0, 0.28);
+
+  border-radius: 10px;
+  padding: 12px;
+
+  overflow-x: auto;
+  margin: 6px 0;
+}
+
+.respuesta-rag pre code {
+  background: transparent;
+  padding: 0;
+  overflow-wrap: normal;
+}
+
+/* =========================================
+   16. TABLAS
+   ========================================= */
+
+.respuesta-rag table {
+  display: block;
+  max-width: 100%;
+
+  overflow-x: auto;
+  border-collapse: collapse;
+
+  margin: 6px 0;
+  font-size: 0.92rem;
+}
+
+.respuesta-rag th,
+.respuesta-rag td {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  padding: 6px 9px;
+  text-align: left;
+}
+
+.respuesta-rag th {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* =========================================
+   17. SEPARADORES
+   ========================================= */
+
+.respuesta-rag hr {
+  border: none;
+
+  border-top:
+    1px solid var(--glass-border);
+
+  margin: 10px 0;
+}
+
+/* Sin margenes extra al inicio o final */
+
+.respuesta-rag > :first-child {
+  margin-top: 0;
+}
+
+.respuesta-rag > :last-child,
+.respuesta-rag li > :last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================
+   18. AREA DE CONSULTAS
+   ========================================= */
+
 .chat-input-area {
   padding: 18px 20px 20px;
+
   background: rgba(255, 255, 255, 0.07);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.12);
+
   backdrop-filter: blur(10px);
 }
 
@@ -289,15 +601,23 @@ body {
   width: 100%;
   min-height: 62px;
   resize: none;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.10);
+
   outline: none;
   border-radius: 18px;
+
   padding: 16px 18px;
+
   font-size: 0.98rem;
   font-family: inherit;
+
   background: rgba(255, 255, 255, 0.94);
   color: #33101a;
+
   margin-bottom: 14px;
+
   box-shadow: var(--shadow-input);
   transition: var(--transition);
 }
@@ -308,6 +628,7 @@ body {
 
 .chat-input:focus {
   border-color: rgba(255, 255, 255, 0.35);
+
   box-shadow:
     0 0 0 4px rgba(255, 255, 255, 0.08),
     inset 0 1px 2px rgba(255, 255, 255, 0.16);
@@ -318,28 +639,54 @@ body {
   cursor: not-allowed;
 }
 
+/* =========================================
+   19. BOTONES DE ACCION
+   ========================================= */
+
 .buttons-area {
   display: flex;
+  flex-direction: column;
+
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-end;
+
+  gap: 9px;
 }
+
+/* Boton Enviar */
 
 .btn-enviar {
   border: none;
-  background: linear-gradient(180deg, #ffffff 0%, #f3e7ec 100%);
+
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #f3e7ec 100%
+  );
+
   color: #7c0027;
+
   padding: 12px 24px;
   border-radius: 999px;
+
   font-size: 0.95rem;
   font-weight: 700;
+
   cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.12);
 }
 
 .btn-enviar:hover {
   transform: translateY(-1px);
-  background: linear-gradient(180deg, #ffffff 0%, #ead7df 100%);
+
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #ead7df 100%
+  );
 }
 
 .btn-enviar:active {
@@ -352,6 +699,98 @@ body {
   transform: none;
 }
 
+/* =========================================
+   20. BOTON LIMPIAR CHAT
+   ========================================= */
+
+.btn-limpiar {
+  border:
+    1px solid rgba(255, 255, 255, 0.20);
+
+  background: var(--azul-marino);
+  color: #ffffff;
+
+  padding: 7px 11px;
+  border-radius: 999px;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: var(--transition);
+
+  box-shadow:
+    0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.btn-limpiar:hover {
+  background: var(--azul-marino-hover);
+
+  border-color:
+    rgba(255, 255, 255, 0.35);
+
+  transform: translateY(-1px);
+}
+
+.btn-limpiar:active {
+  transform: translateY(0);
+}
+
+.btn-limpiar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================
+   21. ACCESO ADMINISTRADOR
+   ========================================= */
+
+.admin-footer {
+  width: 100%;
+  max-width: 930px;
+
+  display: flex;
+  justify-content: center;
+
+  padding: 22px 0 0;
+  margin-top: 12px;
+}
+
+.btn-admin {
+  border:
+    1px solid rgba(255, 255, 255, 0.18);
+
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+
+  border-radius: 7px;
+
+  padding: 6px 9px;
+
+  font-size: 0.65rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: var(--transition);
+
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.10);
+}
+
+.btn-admin:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
+
+.btn-admin:active {
+  transform: translateY(0);
+}
+
+/* =========================================
+   22. TABLETAS
+   ========================================= */
+
 @media (max-width: 900px) {
   .chat-wrapper {
     min-height: 590px;
@@ -362,17 +801,26 @@ body {
   }
 }
 
+/* =========================================
+   23. TELEFONOS MOVILES
+   ========================================= */
+
 @media (max-width: 768px) {
   .app {
     padding: 18px 12px;
   }
 
+  .logo-container {
+    margin-bottom: 18px;
+  }
+
   .logo-img {
-    width: 135px;
+    width: 67.5px;
+    margin-bottom: 10px;
   }
 
   .titulo {
-    letter-spacing: 1.6px;
+    letter-spacing: 1.1px;
   }
 
   .subtitulo {
@@ -388,19 +836,97 @@ body {
   .chat-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 8px;
+
+    padding: 16px 18px;
+  }
+
+  .chat-body {
+    padding: 16px 14px;
+    gap: 10px;
   }
 
   .mensaje {
     max-width: 94%;
     font-size: 0.95rem;
+    padding: 11px 13px;
+  }
+
+  /* Markdown compacto en celulares */
+
+  .respuesta-rag {
+    font-size: 0.92rem;
+    line-height: 1.38;
+  }
+
+  .respuesta-rag p {
+    margin-bottom: 4px;
+  }
+
+  .respuesta-rag h1 {
+    font-size: 1.22rem;
+  }
+
+  .respuesta-rag h2 {
+    font-size: 1.12rem;
+  }
+
+  .respuesta-rag ul,
+  .respuesta-rag ol {
+    padding-left: 19px;
+    margin: 3px 0 5px;
+  }
+
+  .respuesta-rag li {
+    margin-bottom: 2px;
+  }
+
+  .chat-input-area {
+    padding: 14px;
   }
 
   .buttons-area {
-    justify-content: stretch;
+    align-items: stretch;
+    gap: 8px;
   }
 
   .btn-enviar {
     width: 100%;
+  }
+
+  .btn-limpiar {
+    align-self: center;
+  }
+
+  .admin-footer {
+    padding-top: 18px;
+  }
+}
+
+/* =========================================
+   24. PANTALLAS MUY PEQUEÑAS
+   ========================================= */
+
+@media (max-width: 400px) {
+  .app {
+    padding: 12px 8px;
+  }
+
+  .chat-body {
+    padding: 12px 10px;
+  }
+
+  .mensaje {
+    max-width: 97%;
+    padding: 10px 12px;
+  }
+
+  .respuesta-rag {
+    font-size: 0.90rem;
+    line-height: 1.38;
+  }
+
+  .titulo {
+    font-size: 1.54rem;
   }
 }

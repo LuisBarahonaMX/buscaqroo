@@ -1,87 +1,123 @@
+
 import React, { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 import "./App.css";
 import logoBuscaQroo from "./assets/logo_buscaqroo_guinda.png";
+
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminConsultas from "./pages/AdminConsultas";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+// ============================================
+// CONFIGURACION GENERAL
+// ============================================
+
 const API_URL = "/api/chat";
 
+const MENSAJE_BIENVENIDA =
+  "Hola, estoy para ayudarte en tus consultas sobre información de instituciones públicas de Quintana Roo.";
+
+// ============================================
+// IDENTIFICADOR DE SESION
+// ============================================
+
 const obtenerSessionId = () => {
-  let sessionId = localStorage.getItem("buscaqroo_session_id");
+  let sessionId = localStorage.getItem(
+    "buscaqroo_session_id"
+  );
 
   if (!sessionId) {
     sessionId = `session_${Date.now()}_${Math.random()
       .toString(36)
       .slice(2, 10)}`;
-    localStorage.setItem("buscaqroo_session_id", sessionId);
+
+    localStorage.setItem(
+      "buscaqroo_session_id",
+      sessionId
+    );
   }
 
   return sessionId;
 };
 
-const renderTextoConLinks = (texto) => {
-  const urlRegex =
-    /((https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9-]+\.(gob\.mx|org\.mx|com\.mx|mx|org|com|net)(\/[^\s]*)?))/gi;
+// ============================================
+// RENDERIZADO MARKDOWN PARA RESPUESTAS RAG
+// ============================================
 
-  return texto.split(/(\s+)/).map((parte, index) => {
-    if (urlRegex.test(parte)) {
-      let href = parte.trim();
+function RespuestaMarkdown({ texto }) {
+  return (
+    <div className="respuesta-rag">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          a: ({ node, ...props }) => (
+            <a
+              {...props}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mensaje-link"
+            />
+          ),
+        }}
+      >
+        {String(texto ?? "")}
+      </ReactMarkdown>
+    </div>
+  );
+}
 
-      if (!href.startsWith("http://") && !href.startsWith("https://")) {
-        href = "https://" + href;
-      }
-
-      return (
-        <a
-          key={index}
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mensaje-link"
-        >
-          {parte}
-        </a>
-      );
-    }
-
-    return <React.Fragment key={index}>{parte}</React.Fragment>;
-  });
-};
+// ============================================
+// COMPONENTE PRINCIPAL DEL CHAT PUBLICO
+// ============================================
 
 function PublicChat() {
   const [mensaje, setMensaje] = useState("");
   const [cargando, setCargando] = useState(false);
+
   const [mensajes, setMensajes] = useState([
     {
       rol: "bot",
-      texto:
-        "Hola, soy BuscaQroo. Estoy listo para ayudarte a consultar información institucional de Quintana Roo.",
+      texto: MENSAJE_BIENVENIDA,
     },
   ]);
+
+  // ==========================================
+  // ENVIAR MENSAJE AL BACKEND
+  // ==========================================
 
   const enviarMensaje = async (e) => {
     e.preventDefault();
 
     const textoUsuario = mensaje.trim();
-    if (!textoUsuario || cargando) return;
+
+    if (!textoUsuario || cargando) {
+      return;
+    }
 
     const nuevoMensajeUsuario = {
       rol: "user",
       texto: textoUsuario,
     };
 
-    setMensajes((prev) => [...prev, nuevoMensajeUsuario]);
+    setMensajes((prev) => [
+      ...prev,
+      nuevoMensajeUsuario,
+    ]);
+
     setMensaje("");
     setCargando(true);
 
     try {
       const response = await fetch(API_URL, {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           message: textoUsuario,
           sessionId: obtenerSessionId(),
@@ -91,7 +127,11 @@ function PublicChat() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data?.detalle || data?.error || `HTTP ${response.status}`);
+        throw new Error(
+          data?.detalle ||
+          data?.error ||
+          `HTTP ${response.status}`
+        );
       }
 
       const respuestaBot =
@@ -108,8 +148,12 @@ function PublicChat() {
           texto: respuestaBot,
         },
       ]);
+
     } catch (error) {
-      console.error("Error al conectar con el backend:", error);
+      console.error(
+        "Error al conectar con el backend:",
+        error
+      );
 
       setMensajes((prev) => [
         ...prev,
@@ -118,136 +162,263 @@ function PublicChat() {
           texto: `Error: ${error.message}`,
         },
       ]);
+
     } finally {
       setCargando(false);
     }
   };
 
+  // ==========================================
+  // LIMPIAR CONVERSACION
+  // ==========================================
+
   const limpiarChat = () => {
     setMensajes([
       {
         rol: "bot",
-        texto:
-          "Hola, soy BuscaQroo. Estoy listo para ayudarte a consultar información institucional de Quintana Roo.",
+        texto: MENSAJE_BIENVENIDA,
       },
     ]);
+
+    setMensaje("");
   };
 
+  // ==========================================
+  // ENVIAR CON ENTER
+  // SHIFT + ENTER PARA SALTO DE LINEA
+  // ==========================================
+
   const manejarEnter = (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (
+      e.key === "Enter" &&
+      !e.shiftKey &&
+      !e.nativeEvent?.isComposing
+    ) {
       e.preventDefault();
-      enviarMensaje(e);
+
+      if (!cargando && mensaje.trim()) {
+        enviarMensaje(e);
+      }
     }
   };
 
+  // ==========================================
+  // INTERFAZ PUBLICA
+  // ==========================================
+
   return (
     <div className="app">
+
+      {/* Fondo visual */}
       <div className="background-overlay"></div>
 
       <div className="main-container">
+
+        {/* ==================================
+            LOGOTIPO Y TITULO
+           ================================== */}
+
         <div className="logo-container">
+
           <img
             src={logoBuscaQroo}
-            alt="Logo BuscaQroo"
+            alt="Logotipo de Busca Qroo"
             className="logo-img"
           />
-          <h1 className="titulo">BUSCAQROO</h1>
+
+          <h1 className="titulo">
+            Busca Qroo
+          </h1>
+
           <p className="subtitulo">
             Asistente inteligente de consulta institucional
           </p>
 
-          <button
-            style={{
-              marginTop: "1rem",
-              background: "#ffffff",
-              color: "#8b0030",
-              border: "none",
-              borderRadius: "10px",
-              padding: "0.7rem 1rem",
-              fontWeight: "bold",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              window.location.href = "/login-admin";
-            }}
-          >
-            Acceso administrador
-          </button>
         </div>
 
+        {/* ==================================
+            CONTENEDOR PRINCIPAL DEL CHAT
+           ================================== */}
+
         <div className="chat-wrapper">
+
+          {/* Encabezado */}
+
           <div className="chat-header">
-            <h2>Consulta pública</h2>
-            <button className="btn-limpiar" onClick={limpiarChat}>
-              Limpiar chat
-            </button>
+
+            <h2>
+              Realizar consulta
+            </h2>
+
           </div>
 
+          {/* ==================================
+              AREA DE MENSAJES
+             ================================== */}
+
           <div className="chat-body">
+
             {mensajes.map((msg, index) => (
+
               <div
                 key={index}
                 className={`mensaje ${
-                  msg.rol === "user" ? "mensaje-user" : "mensaje-bot"
+                  msg.rol === "user"
+                    ? "mensaje-user"
+                    : "mensaje-bot"
                 }`}
               >
-                {msg.rol === "bot" ? renderTextoConLinks(msg.texto) : msg.texto}
+
+                {msg.rol === "bot" ? (
+
+                  <RespuestaMarkdown
+                    texto={msg.texto}
+                  />
+
+                ) : (
+
+                  msg.texto
+
+                )}
+
               </div>
+
             ))}
 
+            {/* Indicador de carga */}
+
             {cargando && (
+
               <div className="mensaje mensaje-bot">
                 Buscando información...
               </div>
+
             )}
+
           </div>
 
-          <form className="chat-input-area" onSubmit={enviarMensaje}>
+          {/* ==================================
+              FORMULARIO DE CONSULTA
+             ================================== */}
+
+          <form
+            className="chat-input-area"
+            onSubmit={enviarMensaje}
+          >
+
             <textarea
               className="chat-input"
               placeholder="Escribe tu consulta aquí..."
               value={mensaje}
-              onChange={(e) => setMensaje(e.target.value)}
+              onChange={(e) => {
+                setMensaje(e.target.value);
+              }}
               onKeyDown={manejarEnter}
-              rows="2"
+              rows={2}
               disabled={cargando}
-            ></textarea>
+            />
+
+            {/* ==================================
+                BOTONES DE ACCION
+               ================================== */}
 
             <div className="buttons-area">
-              <button type="submit" className="btn-enviar" disabled={cargando}>
-                {cargando ? "Enviando..." : "Enviar"}
+
+              {/* Boton Enviar */}
+
+              <button
+                type="submit"
+                className="btn-enviar"
+                disabled={
+                  cargando ||
+                  !mensaje.trim()
+                }
+              >
+
+                {cargando
+                  ? "Enviando..."
+                  : "Enviar"}
+
               </button>
+
+              {/* Boton Limpiar chat */}
+
+              <button
+                type="button"
+                className="btn-limpiar"
+                onClick={limpiarChat}
+                disabled={cargando}
+              >
+                Limpiar chat
+              </button>
+
             </div>
+
           </form>
+
         </div>
+
+        {/* ==================================
+            ACCESO ADMINISTRADOR
+            UBICADO AL FINAL
+           ================================== */}
+
+        <div className="admin-footer">
+
+          <button
+            type="button"
+            className="btn-admin"
+            onClick={() => {
+              window.location.href =
+                "/login-admin";
+            }}
+          >
+            Acceso administrador
+          </button>
+
+        </div>
+
       </div>
+
     </div>
   );
 }
 
+// ============================================
+// ENRUTAMIENTO PRINCIPAL DE LA APLICACION
+// ============================================
+
 function App() {
   const path = window.location.pathname;
 
+  // Acceso administrativo
   if (path === "/login-admin") {
     return <AdminLogin />;
   }
 
+  // Panel administrativo protegido
   if (path === "/admin") {
     return (
-      <ProtectedRoute fallback={<AdminLogin />}>
+      <ProtectedRoute
+        fallback={<AdminLogin />}
+      >
         <AdminDashboard />
       </ProtectedRoute>
     );
   }
 
+  // Consultas administrativas protegidas
   if (path === "/admin/consultas") {
     return (
-      <ProtectedRoute fallback={<AdminLogin />}>
+      <ProtectedRoute
+        fallback={<AdminLogin />}
+      >
         <AdminConsultas />
       </ProtectedRoute>
     );
   }
 
+  // Interfaz ciudadana
   return <PublicChat />;
 }
 
